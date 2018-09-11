@@ -41,27 +41,24 @@ public class Logic {
     private void fillBoard() {
         
         for (int i = 0; i < nMines; i++) {
-            int randomFile   = (int) (Math.random() * height + 0); 
+            int randomRow   = (int) (Math.random() * height + 0); 
             int randomColumn = (int) (Math.random() * width + 0);
             
-            if (board[randomFile][randomColumn].isMine()) {
+            if (board[randomRow][randomColumn].isMine()) {
                 i--;                
             } else {
-                board[randomFile][randomColumn].setMine(true);
+                board[randomRow][randomColumn].setMine(true);
             }
             
         }
         
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                changeMinesAround(board[i][j]);
-                
+                if (!board[i][j].isMine()) {
+                    changeMinesAround(i,j);
+                }
             }
-            
         }
-        
-        
-
     }
     
     private void showBoard() {
@@ -69,7 +66,7 @@ public class Logic {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (board[i][j].isMine()) {
-                    System.out.print("P ");
+                    System.out.print("* ");
                 } 
                 else if (board[i][j].isSelected()) {
                     if (board[i][j].getMinesAround() == 0) {
@@ -88,10 +85,17 @@ public class Logic {
 
     }
 
-    private void changeMinesAround(Field field) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void changeMinesAround(int row, int column) {
+       
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = column - 1; j <= column + 1; j++) {
+                if (i >= 0 && i < height && j >= 0 && j < width) {
+                    if (board[i][j].isMine()) {
+                        board[row][column].addMinesAround();
+                    }
+                }
+            }
+        }
     }
-    
-    
-    
+   
 }

@@ -13,7 +13,7 @@ public class Field {
     
     public Field (){
         this.mine        = false;
-        this.selected    = false;
+        this.selected    = true;
         this.flag        = false;
         this.minesAround = 0;
     }
@@ -24,6 +24,10 @@ public class Field {
 
     public void setMine(boolean mine) {
         this.mine = mine;
+    }
+    
+    public void addMinesAround(){
+        this.minesAround++;
     }
 
     public boolean isSelected() {
