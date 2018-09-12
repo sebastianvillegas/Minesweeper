@@ -21,6 +21,8 @@ public class Minesweeper {
         System.out.println("Please insert the number of mines.");
         int mines    = scan.nextInt();
         
+        System.out.println("");
+        
         Logic logic = new Logic(height, width, mines);
                 
         

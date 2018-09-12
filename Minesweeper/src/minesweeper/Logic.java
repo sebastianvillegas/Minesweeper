@@ -45,7 +45,7 @@ public class Logic {
         String action = "";
         
         fillBoard();
-        showMines();
+        //showMines();
         System.out.println("");
         showBoard();
         
@@ -59,8 +59,10 @@ public class Logic {
             row = scan.nextInt();
             column = scan.nextInt();
             action = scan.nextLine();
+            System.out.println("");
             
             makeMove(row - 1, column - 1, action);
+            System.out.println("");
                     
         }
         
@@ -184,21 +186,20 @@ public class Logic {
         
         if (action.equals(" U")) {
             if (board[row][column].isMine()) {
-                System.out.println("");
                 gameOver(row, column);
             } else {
                 if (board[row][column].isFlag()) {
                     board[row][column].setFlag(false);
                     this.flags--;
                 }
-                
                 if (board[row][column].getMinesAround() > 0) {
-                    board[row][column].setSelected(true);
-                    
+                    board[row][column].setSelected(true);                    
                 } else {
                     uncoverEmpties(row, column);
+                    board[row][column].setSelected(true);
                 }
                 showBoard();
+                
             }
             
         } else if (action.equals(" M")) {
@@ -214,12 +215,9 @@ public class Logic {
                 this.remainingMines--;
             }
             
-            System.out.println("banderas" + flags);
-            System.out.println("minas que quedan" + remainingMines);
-            
             if (remainingMines == 0) {
+                showBoard();
                 if (this.flags == this.nMines) {
-                    showBoard();
                     System.out.println("Victory, great job.");
                     this.gameContinue = false;
                 }
@@ -231,9 +229,16 @@ public class Logic {
 
     private void gameOver(int row, int column) {
         
-        this.gameContinue = false;
+        Scanner scan = new Scanner(System.in);
         showBoard(row,column);
         System.out.println("Ouh! You took a mine, game over. Try again.");
+        System.out.println("Start again? Insert 1 to continue or anything else to finish");
+        String option = scan.nextLine();
+        if (option.equals(1)) {
+            restart();
+        } else {
+            this.gameContinue = false;
+        }
     }
 
     private void uncoverEmpties(int row, int column) {
@@ -252,6 +257,10 @@ public class Logic {
                 }
             }
         }
+    }
+
+    private void restart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
    
 }
