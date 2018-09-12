@@ -13,7 +13,7 @@ public class Field {
     
     public Field (){
         this.mine        = false;
-        this.selected    = true;
+        this.selected    = false;
         this.flag        = false;
         this.minesAround = 0;
     }
