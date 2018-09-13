@@ -421,6 +421,20 @@ public class Logic {
         this.height         = scan.nextInt();
         this.width          = scan.nextInt();
         this.nMines         = scan.nextInt();
+        
+        while(height > 85 && width > 85){
+            System.out.println("height and width can't be bigger than 85");
+            System.out.println("Please insert the height, width and number of mines e.g 8 8 12.");
+            height    = scan.nextInt();
+            width     = scan.nextInt();
+            nMines     = scan.nextInt();            
+        }
+        
+        if (nMines > (height * width)) {
+            System.out.println("Adjusting the mines to the board's maximum capacity");
+            nMines = height * width;
+        }
+        
         this.remainingMines = this.nMines;
         this.flags          = 0;
         this.gameContinue   = true;
