@@ -53,6 +53,9 @@ public class Logic {
         
     }
 
+    /** This method call others to fill the board and show it,
+     * print the instructions and enter to a cycle where is asking for moves.
+     */
     private void startGame() {
         
         Scanner scan = new Scanner(System.in);
@@ -91,19 +94,27 @@ public class Logic {
         
     }
 
+    /** It fills the board with the random mines and calls the method
+     * that calculates the mines around on the fields.
+     */
     private void fillBoard() {
         
+        //For every mine it takes a random row and column
         for (int i = 0; i < nMines; i++) {
             int randomRow   = (int) (Math.random() * height + 0); 
             int randomColumn = (int) (Math.random() * width + 0);
             
             if (board[randomRow][randomColumn].isMine()) {
+                //if the random field is already occupied with a mine
+                //it "repeats" the iteration
                 i--;                
             } else {
+                //if the field is available, it puts the mine.
                 board[randomRow][randomColumn].setMine(true);
             }
         }
         
+        //Calculate the mines around for the fields.
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (!board[i][j].isMine()) {
@@ -113,21 +124,29 @@ public class Logic {
         }
     }
     
+    /** It shows the current state of the board when the user is still playing.
+     */
     private void showBoard() {
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) { 
                 if (board[i][j].isSelected()) {
+                    //If the field is selected.
                     if (board[i][j].getMinesAround() == 0) {
+                        //if it doesn't have mines around, it prints "-"
                         System.out.print("- ");
                     } 
                     else {
+                        //if it has mines around, it prints the number
                         System.out.print(board[i][j].getMinesAround() + " ");
                     }
                 } 
                 else if (board[i][j].isFlag()) {
+                    //If the field is a flag it prints a "P"
                     System.out.print("P ");
+                    
                 } else {
+                    //the default prints "."
                     System.out.print(". ");
                 }
             }
@@ -136,30 +155,49 @@ public class Logic {
 
     }
     
+    /**
+     * It shows the current state of the board when the user loses.
+     * it prints a "x" where the user took the mine.
+     * @param row
+     * row of the position the user took the mine
+     * @param column 
+     * column of the position the user took the mine
+     */
     private void showBoard(int row, int column) {
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (i == row && j == column) {
+                    //In the position the user took the mine, it prints "x"
                     System.out.print("x ");
                 } else {
                     if (board[i][j].isMine() && board[i][j].isFlag()) {
+                        /*
+                        it prints a "+" on the fields the user marked with a flag
+                        and the field was a mine.
+                        */
                         System.out.print("+ ");
                     } 
                     else if (board[i][j].isMine()) {
+                        //It prints a "*" where there is a mine.
                         System.out.print("* ");
                     }
                     else if (board[i][j].isSelected()) {
+                        //If the field is selected.
                         if (board[i][j].getMinesAround() == 0) {
+                            //if it doesn't have mines around, it prints "-"
                             System.out.print("- ");
                         } 
                         else {
+                            //if it has mines around, it prints the number
                             System.out.print(board[i][j].getMinesAround() + " ");
                         }
                     } 
                     else if (board[i][j].isFlag()) {
+                        //If the field is a flag it prints a "P"
                         System.out.print("P ");
                     } else {
+                        //the default prints "."
                         System.out.print(". ");
                     }
                 }
@@ -405,7 +443,7 @@ public class Logic {
         System.out.println("");
         System.out.println("Now you can start playing.");
         System.out.println("Make a move with the next format: 'row column action' e.g 3 6 U.");
-        System.out.println("There are 2 actions, undercover 'U' and flag 'M'.");
+        System.out.println("There are 2 actions, undercover 'U' and mark 'M'.");
         
         /*
         While something doesn't change the flag gameContinue,
