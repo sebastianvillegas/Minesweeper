@@ -4,20 +4,28 @@
  */
 package minesweeper;
 
+/** This class simulates the fields on the game's board.
+   It's necessary due to the states we need to know about every field
+   * 
+   @author [Sebastián Villegas]
+*/
 public class Field {
     
-    private boolean mine;
-    private boolean selected;
-    private boolean flag;
-    private int minesAround;
+    private boolean mine;      //Indicates if the field is a mine or not.
+    private boolean selected;  //Indicates if the field has been uncovered.
+    private boolean flag;      //Indicates if the field has a flag.
+    private int minesAround;   //Indicates the number of mines around the field.
     
+// Constructor
     public Field (){
         this.mine        = false;
         this.selected    = false;
         this.flag        = false;
         this.minesAround = 0;
     }
+  
     
+// Setters and getters    
     public boolean isMine() {
         return mine;
     }
