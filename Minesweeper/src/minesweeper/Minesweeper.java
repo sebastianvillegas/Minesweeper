@@ -14,14 +14,10 @@ public class Minesweeper {
         Scanner scan = new Scanner(System.in);
         
         System.out.println("Welcome to the Minesweeper game.");
-        System.out.println("Please insert the height.");
+        System.out.println("Please insert the height, width and number of mines e.g 8 8 12.");
         int height    = scan.nextInt();
-        System.out.println("Please insert the width.");
-        int width = scan.nextInt();
-        System.out.println("Please insert the number of mines.");
-        int mines    = scan.nextInt();
-        
-        System.out.println("");
+        int width     = scan.nextInt();
+        int mines     = scan.nextInt();
         
         Logic logic = new Logic(height, width, mines);
                 

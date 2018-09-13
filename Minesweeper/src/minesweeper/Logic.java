@@ -8,10 +8,10 @@ import java.util.Scanner;
 
 public class Logic {
     
-    final private Field[][] board;
-    final private int height;
-    final private int width;
-    final private int nMines;
+    private Field[][] board;
+    private int height;
+    private int width;
+    private int nMines;
     private int remainingMines;
     private int flags;
     private boolean gameContinue;
@@ -51,7 +51,7 @@ public class Logic {
         
         System.out.println("");
         System.out.println("Now you can start playing.");
-        System.out.println("Make a move with the next format: 'row column action', for example 3 6 U.");
+        System.out.println("Make a move with the next format: 'row column action' e.g 3 6 U.");
         System.out.println("There are 2 actions, undercover 'U' and flag 'M'.");
         
         while(gameContinue){
@@ -60,10 +60,8 @@ public class Logic {
             column = scan.nextInt();
             action = scan.nextLine();
             System.out.println("");
-            
             makeMove(row - 1, column - 1, action);
-            System.out.println("");
-                    
+            
         }
         
     }
@@ -79,7 +77,6 @@ public class Logic {
             } else {
                 board[randomRow][randomColumn].setMine(true);
             }
-            
         }
         
         for (int i = 0; i < height; i++) {
@@ -159,7 +156,9 @@ public class Logic {
                             System.out.print(board[i][j].getMinesAround() + " ");
                         }
                     } 
-                    else {
+                    else if (board[i][j].isFlag()) {
+                        System.out.print("P ");
+                    } else {
                         System.out.print(". ");
                     }
                 }
@@ -184,6 +183,8 @@ public class Logic {
 
     private void makeMove(int row, int column, String action) {
         
+        Scanner scan = new Scanner(System.in);
+        
         if (action.equals(" U")) {
             if (board[row][column].isMine()) {
                 gameOver(row, column);
@@ -191,15 +192,40 @@ public class Logic {
                 if (board[row][column].isFlag()) {
                     board[row][column].setFlag(false);
                     this.flags--;
-                }
-                if (board[row][column].getMinesAround() > 0) {
-                    board[row][column].setSelected(true);                    
-                } else {
-                    uncoverEmpties(row, column);
-                    board[row][column].setSelected(true);
-                }
-                showBoard();
+                    
+                    if (board[row][column].getMinesAround() > 0) {
+                        board[row][column].setSelected(true);                    
+                    } else {
+                        uncoverEmpties(row, column);
+                        board[row][column].setSelected(true);
+                    }
+                    if (remainingMines == 0) {
+                        showBoard();
+                        System.out.println("");
+                        if (this.flags == this.nMines) {
+                            System.out.println("Victory, great job.");
+                            System.out.println("Start again? Insert 1 to continue or anything else to finish");
+                            String option = scan.nextLine();
+                            if (option.equals("1")) {
+                                restart();
+                            } else {
+                                this.gameContinue = false;
+                            }
+                        }
+                    }
+                    showBoard();
+                    System.out.println("");
                 
+                } else {
+                    if (board[row][column].getMinesAround() > 0) {
+                        board[row][column].setSelected(true);                    
+                    } else {
+                        uncoverEmpties(row, column);
+                        board[row][column].setSelected(true);
+                    }
+                    showBoard();
+                    System.out.println("");
+                }
             }
             
         } else if (action.equals(" M")) {
@@ -217,12 +243,20 @@ public class Logic {
             
             if (remainingMines == 0) {
                 showBoard();
+                System.out.println("");
                 if (this.flags == this.nMines) {
                     System.out.println("Victory, great job.");
-                    this.gameContinue = false;
+                    System.out.println("Start again? Insert 1 to continue or anything else to finish");
+                    String option = scan.nextLine();
+                    if (option.equals("1")) {
+                        restart();
+                    } else {
+                        this.gameContinue = false;
+                    }
                 }
             } else {
                 showBoard();
+                System.out.println("");
             }
         }
     }
@@ -231,10 +265,11 @@ public class Logic {
         
         Scanner scan = new Scanner(System.in);
         showBoard(row,column);
+        System.out.println("");
         System.out.println("Ouh! You took a mine, game over. Try again.");
         System.out.println("Start again? Insert 1 to continue or anything else to finish");
         String option = scan.nextLine();
-        if (option.equals(1)) {
+        if (option.equals("1")) {
             restart();
         } else {
             this.gameContinue = false;
@@ -260,7 +295,43 @@ public class Logic {
     }
 
     private void restart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please insert the height, width, number of mines e.g 8 8 12.");
+        this.height         = scan.nextInt();
+        this.width          = scan.nextInt();
+        this.nMines         = scan.nextInt();
+        this.remainingMines = this.nMines;
+        this.flags          = 0;
+        this.gameContinue   = true;
+        board               = new Field[height][width];
+        
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                board[i][j] = new Field();
+            }            
+        }
+        int row       = 0;
+        int column    = 0;
+        String action = "";
+        
+        fillBoard();
+        //showMines();
+        System.out.println("");
+        showBoard();
+        
+        System.out.println("");
+        System.out.println("Now you can start playing.");
+        System.out.println("Make a move with the next format: 'row column action' e.g 3 6 U.");
+        System.out.println("There are 2 actions, undercover 'U' and flag 'M'.");
+        
+        while(gameContinue){
+            System.out.println("Make the next move.");
+            row = scan.nextInt();
+            column = scan.nextInt();
+            action = scan.nextLine();
+            System.out.println("");
+            makeMove(row - 1, column - 1, action);
+        }
     }
    
 }
